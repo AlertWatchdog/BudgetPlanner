@@ -1,0 +1,46 @@
+<div class="table-container mat-elevation-z8">
+        <div>
+            <mat-form-field style="padding-left: 1.7em;">
+                <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+    
+        <mat-table class="expenses-table" [dataSource]="dataSource" matSort>
+    
+            <ng-container matColumnDef="categoryName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let expense">{{expense.name}}</mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="expenseAmount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Amount saved</mat-header-cell>
+                <mat-cell class="used-cell" *matCellDef="let expense">{{expense.totalSavings}}</mat-cell>
+            </ng-container>
+    
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+            <mat-row *matRowDef="let row; columns: displayedColumns" matRipple class="element-row" [cdkDetailRow]="row"
+                [cdkDetailRowTpl]="tpl"></mat-row>
+    
+            <ng-template #tpl let-expense>
+                <div class="detail-row">
+                    <table class="detail-table">
+                        <tr class="mat-body-2 mat-header-cell">
+                            <th scope="col">Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                        <tr *ngFor="let entry of expense.savings" class="mat-body">
+                            <td>{{ entry.name}}</td>
+                            <td>{{ entry.date}}</td>
+                            <td>{{ entry.amount}}</td>
+                        </tr>
+                        <tr style="border: none; height: 1em;">
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </ng-template>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
