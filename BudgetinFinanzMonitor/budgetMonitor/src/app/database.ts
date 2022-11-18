@@ -1,4 +1,5 @@
-import {IBudget, IExpenseCategory, IIncomeCategory, ISavingsCategory, ISaving, IIncome, IExpense, IYear, IMonth} from './datamodel';
+import {IBudget, IExpenseCategory, IIncomeCategory, ISavingsCategory, ICashflow, IYear, IMonth} from './datamodel';
+
 export class Database{
     public getCurrentYear(): IYear{
         var thisYear: IYear = {
