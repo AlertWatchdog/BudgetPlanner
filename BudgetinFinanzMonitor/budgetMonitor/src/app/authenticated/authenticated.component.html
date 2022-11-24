@@ -16,8 +16,19 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <mat-icon><span class="material-icons" (click)="drawer.toggle()">attach_money</span></mat-icon>
-      <span>Budgetmonitor</span>
+      <mat-select placeholder="Years" [(value)] = "selectedYear" id="yearSelect">
+        <mat-option *ngFor="let lY of loadableYears" [value]="lY.value">
+          {{lY.viewValue}}
+        </mat-option>
+        <mat-option value="more" (click)="loadMoreYears()">
+          Load more years
+        </mat-option>
+      </mat-select>
+      <mat-select placeholder="Months" [(value)] = "selectedMonth" id="monthSelect">
+        <mat-option *ngFor="let mo of loadableMonths" [value]="mo.month">
+          {{mo.month}}
+        </mat-option>
+      </mat-select>
       <div class="quicklink-container">
         <span class="material-icons quicklink" (click)="openModal()">add_box</span>
       </div>
@@ -36,7 +47,7 @@
 
     <div class="modal-body" id="modal-body">
       <mat-form-field>
-        <mat-select placeholder="Type of Cashflow">
+        <mat-select placeholder="Type of Cashflow" [(value)] = "selectedType" (selectionChange)="changeAutomaticSavingCheckboxVisibility()">
           <mat-option *ngFor="let cftype of cashflowTypes" [value]="cftype.value">
             {{cftype.viewValue}}
           </mat-option>
@@ -83,7 +94,8 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-checkbox [formControl]="monthlyFormControl">Monatlicher Geldfluss</mat-checkbox>
+      <mat-checkbox [formControl]="monthlyFormControl">Monthly Cashflow</mat-checkbox>
+      <mat-checkbox [formControl]="automaticSavingFormControl" id="automaticSaving">Automatic saving</mat-checkbox>
     </div>
     <hr>
     <div class="modal-footer" id="modal-footer">

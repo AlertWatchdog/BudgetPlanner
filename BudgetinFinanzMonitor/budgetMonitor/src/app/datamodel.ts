@@ -35,6 +35,9 @@ export interface IYear {
     totalExpenses: number,
     totalIncomes: number,
     totalSavings: number,
+    accumulatedExpenses: number,
+    accumulatedIncomes: number,
+    accumulatedSavings: number,
     months: IMonth[]
 }
 

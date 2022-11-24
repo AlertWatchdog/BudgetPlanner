@@ -2,25 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { NONE_TYPE } from '@angular/compiler';
+import { DOCUMENT } from '@angular/common';
+import { Database } from '../database';
+import { IYear } from '../datamodel';
+import { newArray } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-authenticated',
   templateUrl: './authenticated.component.html',
-  styleUrls: ['./authenticated.component.css']
+  styleUrls: ['./authenticated.component.css'],
 })
 export class AuthenticatedComponent implements OnInit {
   cashflowTypes = [
     {value: "Expense", viewValue: "Expense"},
     {value: "Income", viewValue: "Income"},
     {value: "Saving", viewValue: "Saving"},
-    {value: "budget", viewValue: "Budget"}
+    {value: "Budget", viewValue: "Budget"}
   ];
 
   selectedCategory = "none";
+  selectedType = "none";
 
   categories = [{
     name: "Kategorei 1",
@@ -39,16 +44,52 @@ export class AuthenticatedComponent implements OnInit {
       shareReplay()
     );
   
-    categoryControl = new UntypedFormControl();
-
-  constructor(private breakpointObserver: BreakpointObserver, private appComponent: AppComponent) {    
+    categoryControl = new FormControl();
+    year : IYear = this.db.getEmptyYear();
+  constructor(private breakpointObserver: BreakpointObserver, private appComponent: AppComponent, private db: Database) {    
+    this.loadUserData();
   }
   dataReady: boolean = false;
   ngOnInit() {
   }
 
+  workingYear = this.year;
+  selectedYear = this.year.year;
+  selectedMonth = 0;
+  loadableYears = [{value: this.year.year, viewValue: this.year.year}];
+  loadableMonths = this.year.months;
+  loadedYears : IYear[] | undefined;
+
   async loadUserData(){
+    this.year = await this.db.getCurrentYear();
+    this.loadableYears[0] = {value: this.year.year, viewValue: this.year.year};
+    this.selectedYear = this.year.year;
+    this.loadableMonths = this.year.months;
+    this.selectedMonth = this.year.months[this.year.months.length - 1].month;
     
+  }
+
+  async loadMoreYears(){
+    let currentYears = await this.db.getAllYears();
+    currentYears.forEach(year => {
+      if(year.year !== this.year.year)
+        this.loadableYears.push({value: year.year, viewValue: year.year})
+    }); 
+    if(this.loadableYears.length > 1){
+      this.selectedYear = this.loadableYears[1].value;
+    }
+  }
+
+  changeWorkingYear(){
+    if(this.selectedYear === this.year.year){
+      this.workingYear = this.year;
+    } else if (this.loadedYears !== undefined){
+      this.loadedYears.forEach(yr => {
+        if(yr.year === this.selectedYear){
+          this.workingYear = yr;
+        }
+      })
+    }
   }
 
   openModal(){
@@ -71,31 +112,45 @@ export class AuthenticatedComponent implements OnInit {
 
   matcher = new ErrorStateMatcher();
   
-  typeFormControl = new UntypedFormControl('', [
+  typeFormControl = new FormControl('', [
     Validators.required,
   ]);
-  categoryFormControl = new UntypedFormControl('', [
+  categoryFormControl = new FormControl('', [
     Validators.required,
   ]);
-  nameFormControl = new UntypedFormControl('', [
+  nameFormControl = new FormControl('', [
     Validators.required,
   ]);
-  newCatFormControl = new UntypedFormControl('', [
+  newCatFormControl = new FormControl('', [
     Validators.required, //Vervollständigen
   ]);
-  amountFormControl = new UntypedFormControl('', [
+  amountFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern("[0-9]*([\.\,][0-9]{1,2})?"),
     this.amountZero
   ]);
-  monthlyFormControl = new UntypedFormControl('', [
+  monthlyFormControl = new FormControl('', [
     Validators.required,
   ]);
-  cashSavingControl = new UntypedFormControl('', [
+  cashSavingControl = new FormControl('', [
+    Validators.required,
+  ]);
+  automaticSavingFormControl = new FormControl('', [
     Validators.required,
   ]);
 
-  amountZero(control: UntypedFormControl){
+  changeAutomaticSavingCheckboxVisibility(){
+    let checkbox = document.getElementById("automaticSaving");
+    if(checkbox !== null){
+      if(this.selectedType === "Budget"){
+        checkbox.style.visibility = "visible";
+      }else{
+        checkbox.style.visibility = "hidden";
+      }
+    }
+  }
+
+  amountZero(control: FormControl){
     let value = control.value.replace(',', '.');
   
     if(parseFloat(value) !== 0){   

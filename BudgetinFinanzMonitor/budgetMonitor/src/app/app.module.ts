@@ -54,6 +54,7 @@ import { OverviewComponent } from './pages/overview/overview.component';
 import { AuthenticatedComponent } from './authenticated/authenticated.component';
 import { SavingsComponent } from './pages/savings/savings.component';
 import { CdkDetailRowDirective } from './cdk-detail-row.directive';
+import { Database } from './database';
 
 //import { HighchartsChartComponent } from 'highcharts-angular';
 
@@ -114,7 +115,7 @@ import { CdkDetailRowDirective } from './cdk-detail-row.directive';
     ReactiveFormsModule,
     
   ],
-  providers: [],
+  providers: [Database],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
