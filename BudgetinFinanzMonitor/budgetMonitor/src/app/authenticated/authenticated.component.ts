@@ -9,7 +9,6 @@ import { NONE_TYPE } from '@angular/compiler';
 import { DOCUMENT } from '@angular/common';
 import { Database } from '../database';
 import { IYear } from '../datamodel';
-import { newArray } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-authenticated',

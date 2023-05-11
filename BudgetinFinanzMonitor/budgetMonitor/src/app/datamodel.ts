@@ -3,6 +3,7 @@ export interface IBudget {
     size: number,
     spent: number,
     addedCategories: IExpenseCategory[],
+    autoSavings: boolean
 }
 
 export interface IExpenseCategory {

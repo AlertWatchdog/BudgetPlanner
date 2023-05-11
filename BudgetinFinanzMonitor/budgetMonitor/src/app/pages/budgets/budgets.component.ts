@@ -12,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
 export class BudgetsComponent implements OnInit {
   constructor() { }
   dataSource = new MatTableDataSource<IBudget>(BUDGETS);
-  displayedColumns = ["budgetName", "budgetSize", "budgetUsed", "budgetLeft"];
+  displayedColumns = ["budgetName", "budgetSize", "budgetUsed", "budgetLeft", "delete-edit"];
   
 
 
@@ -57,12 +57,14 @@ const BUDGETS: IBudget[] =[{
   name: "Einkauf",
   size: 1000,
   spent: 500,
-  addedCategories: addedCategories
+  addedCategories: addedCategories,
+  autoSavings: true
 }, {
   name: "Motorrad",
   size: 200,
   spent: 0,
-  addedCategories: []
+  addedCategories: [],
+  autoSavings: false
 
 }];
 

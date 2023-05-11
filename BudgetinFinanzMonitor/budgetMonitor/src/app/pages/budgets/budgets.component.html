@@ -6,33 +6,36 @@
     </div>
 
     <mat-table class="budgets-table mat-elevation-z8" [dataSource]="dataSource">
-  
+
         <ng-container matColumnDef="budgetName">
             <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell class="name-cell"
-                    *matCellDef="let budget">{{budget.name}}</mat-cell>
+            <mat-cell class="name-cell" *matCellDef="let budget">{{budget.name}}</mat-cell>
         </ng-container>
-      
+
         <ng-container matColumnDef="budgetSize">
             <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
-            <mat-cell class="size-cell"
-                      *matCellDef="let budget">{{budget.size}}</mat-cell>
+            <mat-cell class="size-cell" *matCellDef="let budget">{{budget.size}}</mat-cell>
         </ng-container>
-      
+
         <ng-container matColumnDef="budgetUsed">
             <mat-header-cell *matHeaderCellDef>Used</mat-header-cell>
-            <mat-cell class="used-cell"
-                      *matCellDef="let budget">{{budget.used}}</mat-cell>
+            <mat-cell class="used-cell" *matCellDef="let budget">{{budget.used}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="budgetLeft">
-                <mat-header-cell *matHeaderCellDef>Left</mat-header-cell>
-                <mat-cell class="left-cell"
-                          *matCellDef="let budget">{{budget.left}}</mat-cell>
-            </ng-container>
-        
+            <mat-header-cell *matHeaderCellDef>Left</mat-header-cell>
+            <mat-cell class="left-cell" *matCellDef="let budget">{{budget.left}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delete-edit">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell class="edit-cell" *matCellDef="let budget"><span class="material-symbols-outlined">edit</span></mat-cell>
+        </ng-container>
+
+
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        
+
         <mat-row *matRowDef="let row; columns: displayedColumns" matRipple class="element-row" [cdkDetailRow]="row"
             [cdkDetailRowTpl]="tpl"></mat-row>
 
@@ -53,7 +56,7 @@
                 </table>
             </div>
         </ng-template>
-        
+
     </mat-table>
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
